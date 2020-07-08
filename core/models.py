@@ -18,7 +18,10 @@ class Book(models.Model):
     book_type = models.CharField(max_length=255)
     book_genre = models.CharField(max_length=255)
     book_length = models.CharField(max_length=255)
-    publish_datetime = models.DateTimeField()
+    publish_datetime = models.DateTimeField(blank=True, null=True)
+
+    def get_count(self):
+        return self.objects.filter(title=self.title, author__name=self.author.name).count()
 
 
 class BookList(models.Model):
