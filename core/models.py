@@ -20,6 +20,9 @@ class Book(models.Model):
     book_length = models.CharField(max_length=255)
     publish_datetime = models.DateTimeField(blank=True, null=True)
 
+    def __repr__(self):
+        return f'"{self.title}" by {self.author.name}'
+
     def get_count(self):
         return self.objects.filter(title=self.title, author__name=self.author.name).count()
 

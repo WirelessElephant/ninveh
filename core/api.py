@@ -13,7 +13,7 @@ from core.serializers import BookSerializer, BookListSerializer, PersonSerialize
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    filterset_fields = ['title']
+    filterset_fields = ['title', 'author__name']
 
     @action(detail=False)
     def frequency(self, request):
@@ -21,7 +21,13 @@ class BookViewSet(viewsets.ModelViewSet):
         if requested_count is None:
             raise ParseError('You must specify a "count" parameter in the request.')
 
-        target_books = Book.objects.annotate(copies=Count('title')).filter(copies=requested_count).distinct('author', 'title')
+        target_book_titles = Book.objects\
+            .values('title')\
+            .annotate(copies=Count('title'))\
+            .filter(copies=requested_count)\
+            .values_list('title')
+
+        target_books = self.get_queryset().filter(title__in=target_book_titles).distinct('title')
         
         page = self.paginate_queryset(target_books)
 

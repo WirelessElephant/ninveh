@@ -10,12 +10,12 @@ class PersonSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    author = PersonSerializer()
-    recommender = PersonSerializer()
+    author = serializers.CharField(source="author.name")
+    recommender = serializers.CharField(source="recommender.name")
 
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ('title', 'author', 'recommender', 'source', 'amazon_link', 'description', 'book_type', 'book_genre', 'book_length')
 
 
 class BookListSerializer(serializers.ModelSerializer):
