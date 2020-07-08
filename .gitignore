@@ -1,0 +1,6 @@
+ninveh/env.py
+*.swp
+*.pyc
+*.sqlite3
+*.csv
+*/__pycache__
