@@ -4,3 +4,4 @@ ninveh/env.py
 *.sqlite3
 *.csv
 */__pycache__
+static/

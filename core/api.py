@@ -10,10 +10,19 @@ from core.models import Book, BookList, Person
 from core.serializers import BookSerializer, BookListSerializer, PersonSerializer
 
 
+class BookFilter(filters.FilterSet):
+    class Meta:
+        model = Book
+        fields = {
+            'title': ['icontains'],
+            'author__name': ['icontains']
+        }
+
+
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    filterset_fields = ['title', 'author__name']
+    filterset_class = BookFilter
 
     @action(detail=False)
     def frequency(self, request):
