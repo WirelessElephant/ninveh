@@ -19,8 +19,12 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
-    owner = PersonSerializer(required=True)
+    books = serializers.PrimaryKeyRelatedField(
+        queryset=Book.objects.all(),
+        many=True, required=False)
+    owner = serializers.PrimaryKeyRelatedField(
+        queryset=Person.objects.filter(is_critic=True),
+        required=True)
 
     class Meta:
         model = BookList

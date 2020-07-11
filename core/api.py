@@ -1,4 +1,4 @@
-from django.db.models import Count, Q, F
+from django.db.models import Count
 
 from django_filters import rest_framework as filters
 from rest_framework import viewsets
@@ -10,19 +10,30 @@ from core.models import Book, BookList, Person
 from core.serializers import BookSerializer, BookListSerializer, PersonSerializer
 
 
-class BookFilter(filters.FilterSet):
+class BookFilterSet(filters.FilterSet):
     class Meta:
         model = Book
         fields = {
             'title': ['icontains'],
-            'author__name': ['icontains']
+            'author__name': ['icontains'],
+            'id': ['in']
+        }
+
+
+class PersonFilterSet(filters.FilterSet):
+    class Meta:
+        model = Person
+        fields = {
+            'name': ['istartswith'],
+            'is_critic': ['exact'], 
+            'is_author': ['exact'] 
         }
 
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    filterset_class = BookFilter
+    filterset_class = BookFilterSet
 
     @action(detail=False)
     def frequency(self, request):
@@ -52,9 +63,11 @@ class BookViewSet(viewsets.ModelViewSet):
 class BookListViewSet(viewsets.ModelViewSet):
     queryset = BookList.objects.all()
     serializer_class = BookListSerializer
+    filterset_fields = ['owner', 'books']
 
 
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
-    filterset_fields = ['is_author', 'is_critic', 'name']
+    filterset_class = PersonFilterSet
+
