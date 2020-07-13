@@ -26,7 +26,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECRET_KEY located in ninveh/env.py
 # DEBUG located in ninveh/env.py
 
-ALLOWED_HOSTS = ['pg.lgpt.io']
+ALLOWED_HOSTS = [
+    'ninveh.lgpt.io',
+    'localhost'
+]
 
 # Application definition
 

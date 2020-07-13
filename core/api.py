@@ -31,7 +31,7 @@ class PersonFilterSet(filters.FilterSet):
 
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all()
+    queryset = Book.objects.distinct('author__name', 'title').all()
     serializer_class = BookSerializer
     filterset_class = BookFilterSet
 
